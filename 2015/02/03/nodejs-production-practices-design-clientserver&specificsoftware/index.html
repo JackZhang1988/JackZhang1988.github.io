@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件 | Jianbo&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件">
+<meta property="og:url" content="http://ppoffice.github.io/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/index.html">
+<meta property="og:site_name" content="Jianbo's Blog">
+<meta property="og:description" content="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件">
+<meta property="og:updated_time" content="2015-12-16T10:30:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件">
+<meta name="twitter:description" content="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件">
+  
+  
+    <link rel="icon" href="favicon.png">
+  
+  
+ <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+ <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+
+  <link rel="stylesheet" href="/hexo-theme-icarus/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/hexo-theme-icarus/font-awesome/css/font-awesome.min.css" type="text/css">
+  
+
+  
+
+  
+</head>
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo"><i class="logo" style="background-image: url(/hexo-theme-icarus/css/images/logo.png)"></i><span class="site-title">Jianbo&#39;s Blog</span></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/.">Home</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/about">About</a>
+        
+      </nav>
+      
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/hexo-theme-icarus/css/images/me.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+      
+      <div id="search-form-wrap">
+        
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit"> </button><input type="hidden" name="sitesearch" value="http://ppoffice.github.io/hexo-theme-icarus"></form>
+        
+      </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tr>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/.">Home</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/archives">Archives</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/categories">Categories</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/tags">Tags</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/about">About</a></td>
+        
+        <td>
+          
+            <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><input type="hidden" name="sitesearch" value="http://ppoffice.github.io/hexo-theme-icarus"></form>
+          
+        </td>
+      </tr>
+    </table>
+  </div>
+</header>
+
+    <div class="outer">
+      
+        <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="/hexo-theme-icarus/css/images/me.jpg">
+      <h2 id="name">Jianbo Zhang</h2>
+      <h3 id="title">Web Developer</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Beijing, China</span>
+      <a id="follow" href="https://github.com/JackZhang1988">关注我</a>
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        8
+        <span>文章</span>
+      </div>
+      <div class="article-info-block">
+        0
+        <span>标签</span>
+      </div>
+    </div>
+    
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+          <td><a href="https://github.com/JackZhang1988" target="_blank" title="github"><i class="fa fa-github"></i></a></td>
+          
+          <td><a href="https://www.facebook.com/jianbo1988" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></td>
+          
+          <td><a href="/hexo-theme-icarus/atom.xml" target="_blank" title="rss"><i class="fa fa-rss"></i></a></td>
+          
+        </tr>
+      </table>
+    </div>
+    
+    
+  </div>
+</aside>
+
+      
+      <section id="main"><article id="post-nodejs-production-practices-design-clientserver&amp;specificsoftware" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      
+	
+		<img src="https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png" class="article-banner">
+	
+
+
+
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/">
+      <time datetime="2015-02-03T11:18:00.000Z" itemprop="datePublished">2015-02-03</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <p><a href="https://www.joyent.com/developers/node/design" target="_blank" rel="external">文章译自:https://www.joyent.com/developers/node/design</a></p>
+<p>##Client Server</p>
+<p>##客户端服务器</p>
+<blockquote>
+<p>It can be advantageous to design your application in such a way that allows you to build distributed systems. It’s quite natural to describe this sort of interface with a REST like API over HTTP, or even with raw JSON over TCP. This allows one to combine Node’s expertise in asynchronous network environments, and the use of streams into a powerful distributed and scalable system.</p>
+</blockquote>
+<p>用可以允许你构建分布式系统的形式设计你的应用是有利的。通过HTTP使用REST形式的API或者通过TCP使用纯JSON格式来描述接口显得十分自然。这允许将Node在异步网络环境的专业性和通过流的特性控制强大的分布式和高扩展性系统相结合起来。</p>
+<p>##Specific Software</p>
+<p>##特定的软件</p>
+<blockquote>
+<p>###restify<br>Restify is a module for creating and consuming REST endpoints. Designed specifically to increase the observability and debugability of your application, Restify comes with first class Bunyan support as well support for DTrace. With Bunyan and DTrace support, you’re gaining the ability to see via the logs or at runtime routes and their latencies over requests.</p>
+</blockquote>
+<p><a href="https://npmjs.org/package/restify" target="_blank" rel="external">Restify</a>是一个构建和使用REST节点的模块。专门针对提高你的应用的可观察性和可调试性而设计，Restify内置支持Bunyan和DTrace。在Bunyan和DTrace的支持下，你可以获得通过log信息或者运行时路由和潜伏的请求查看调试信息的能力。</p>
+<blockquote>
+<p>###fast<br>Fast is a lightweight library for efficiently handling JSON messaging across a TCP channel. At its base it was created to enable message-based RPC, where the result for a given command may induce a series of related objects being streamed to the client. Designed with observability in mind, fast also comes with DTrace support, allowing you to quickly identify the performance characteristics of your server and clients.</p>
+</blockquote>
+<p><a href="https://npmjs.org/package/fast" target="_blank" rel="external">Fast</a>是一个高效地通过TCP通道处理JSON信息的轻量级库。在它的基础上可以传输基于远程过程调用协议的信息，这样可以使用指定的命令来将结果以流的形式将一系列相关对象传输给客户端。基于高可观测性的设计，fast同样支持DTrace，它同样允许你鉴定你的服务器和客户端的性能特征。</p>
+<blockquote>
+<p>###workflow<br>workflow built on top of restify, enables you to define orchestration among a series of remote services and their APIs. This allows you to decompose a complex series of operations down to a sequence of discreet tasks with a state machine. Workflow is more than a mechanism to allow you to define a sequence of tasks that are run in a specified order, it also enables you to handle failure states, describe timeouts and define retries, as well as identify stuck workflows.</p>
+</blockquote>
+<p><a href="https://npmjs.org/package/node-workflow" target="_blank" rel="external">workflow</a>是在<code>restify</code>基础上构建出来的，它可以使你通过一系列的远程服务和它的API定义合理的任务安排。这使得你可以将一系列的复杂操作解耦成一系列的使用状态机的谨慎的任务。Workflow不仅仅是一个允许你按指定顺序定义一系列任务的机制，它同样能让你处理失败的状态，描述超时和定义重连接，它同样能支出堆栈的工作流。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ppoffice.github.io/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/" data-id="cii8n28v70000v0s6iap2rw0h" class="article-share-link">分享到</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/hexo-theme-icarus/2015/02/06/nodejs-production-practices-design-errorhandling/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          NodeJs生产环境最佳实践-设计篇-错误处理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">NodeJs生产环境最佳实践-设计篇-Logging</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+</section>
+      
+        <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/06/nodejs-production-practices-design-errorhandling/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-错误处理" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/06/nodejs-production-practices-design-errorhandling/" class="title">NodeJs生产环境最佳实践-设计篇-错误处理</a></p>
+              <p class="item-date"><time datetime="2015-02-06T12:18:00.000Z" itemprop="datePublished">2015-02-06</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/" class="title">NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件</a></p>
+              <p class="item-date"><time datetime="2015-02-03T11:18:00.000Z" itemprop="datePublished">2015-02-03</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-Logging" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" class="title">NodeJs生产环境最佳实践-设计篇-Logging</a></p>
+              <p class="item-date"><time datetime="2015-02-02T11:18:00.000Z" itemprop="datePublished">2015-02-02</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-代码检验" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/" class="title">NodeJs生产环境最佳实践-设计篇-代码检验</a></p>
+              <p class="item-date"><time datetime="2015-02-01T11:18:00.000Z" itemprop="datePublished">2015-02-01</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/01/29/nodejs-production-practices-design-codingstyle/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-代码风格" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/01/29/nodejs-production-practices-design-codingstyle/" class="title">NodeJs生产环境最佳实践-设计篇-代码风格</a></p>
+              <p class="item-date"><time datetime="2015-01-29T11:18:00.000Z" itemprop="datePublished">2015-01-29</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/hexo-theme-icarus/archives/2015/02/">二月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/hexo-theme-icarus/archives/2015/01/">一月 2015</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+  <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2000 - 2015 Jianbo Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="/hexo-theme-icarus/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/hexo-theme-icarus/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/hexo-theme-icarus/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

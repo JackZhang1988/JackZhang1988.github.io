@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>NodeJs生产环境最佳实践-设计篇-代码检验 | Jianbo&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+<meta property="og:url" content="http://ppoffice.github.io/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/index.html">
+<meta property="og:site_name" content="Jianbo's Blog">
+<meta property="og:description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+<meta property="og:updated_time" content="2015-12-16T10:30:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+<meta name="twitter:description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+  
+  
+    <link rel="icon" href="favicon.png">
+  
+  
+ <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,600' rel='stylesheet' type='text/css'>
+ <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+
+
+  <link rel="stylesheet" href="/hexo-theme-icarus/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/hexo-theme-icarus/font-awesome/css/font-awesome.min.css" type="text/css">
+  
+
+  
+
+  
+</head>
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-main" class="header-inner">
+    <div class="outer">
+      <a href="/" id="logo"><i class="logo" style="background-image: url(/hexo-theme-icarus/css/images/logo.png)"></i><span class="site-title">Jianbo&#39;s Blog</span></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/.">Home</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/categories">Categories</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/tags">Tags</a>
+        
+          <a class="main-nav-link" href="/hexo-theme-icarus/about">About</a>
+        
+      </nav>
+      
+        <nav id="sub-nav">
+          <div class="profile" id="profile-nav">
+            <a id="profile-anchor" href="javascript:;"><img class="avatar" src="/hexo-theme-icarus/css/images/me.jpg"><i class="fa fa-caret-down"></i></a>
+          </div>
+        </nav>
+      
+      <div id="search-form-wrap">
+        
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit"> </button><input type="hidden" name="sitesearch" value="http://ppoffice.github.io/hexo-theme-icarus"></form>
+        
+      </div>
+    </div>
+  </div>
+  <div id="main-nav-mobile" class="header-sub header-inner">
+    <table class="menu outer">
+      <tr>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/.">Home</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/archives">Archives</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/categories">Categories</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/tags">Tags</a></td>
+        
+          <td><a class="main-nav-link" href="/hexo-theme-icarus/about">About</a></td>
+        
+        <td>
+          
+            <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="搜索"><input type="hidden" name="sitesearch" value="http://ppoffice.github.io/hexo-theme-icarus"></form>
+          
+        </td>
+      </tr>
+    </table>
+  </div>
+</header>
+
+    <div class="outer">
+      
+        <aside id="profile">
+  <div class="inner profile-inner">
+    <div class="base-info profile-block">
+      <img id="avatar" src="/hexo-theme-icarus/css/images/me.jpg">
+      <h2 id="name">Jianbo Zhang</h2>
+      <h3 id="title">Web Developer</h3>
+      <span id="location"><i class="fa fa-map-marker"></i>Beijing, China</span>
+      <a id="follow" href="https://github.com/JackZhang1988">关注我</a>
+    </div>
+    <div class="article-info profile-block">
+      <div class="article-info-block">
+        8
+        <span>文章</span>
+      </div>
+      <div class="article-info-block">
+        0
+        <span>标签</span>
+      </div>
+    </div>
+    
+    <div class="contact-info profile-block">
+      <table class="contact-list">
+        <tr>
+          
+          <td><a href="https://github.com/JackZhang1988" target="_blank" title="github"><i class="fa fa-github"></i></a></td>
+          
+          <td><a href="https://www.facebook.com/jianbo1988" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></td>
+          
+          <td><a href="/hexo-theme-icarus/atom.xml" target="_blank" title="rss"><i class="fa fa-rss"></i></a></td>
+          
+        </tr>
+      </table>
+    </div>
+    
+    
+  </div>
+</aside>
+
+      
+      <section id="main"><article id="post-nodejs-production-practices-design-linting" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      
+	
+		<img src="https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png" class="article-banner">
+	
+
+
+
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NodeJs生产环境最佳实践-设计篇-代码检验
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/">
+      <time datetime="2015-02-01T11:18:00.000Z" itemprop="datePublished">2015-02-01</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <p><a href="https://www.joyent.com/developers/node/design" target="_blank" rel="external">文章译自:https://www.joyent.com/developers/node/design</a></p>
+<p>##代码检验（Linting）</p>
+<p>代码检验工具可以静态分析你的代码（而不需要运行它）来制定代码中潜在的bug或危险的设计模式，比如使用未声明的变量或者在switch中“case”声明内没有使用“break”。好的代码分析工具可能会更激进些（比如，有些情况我们是故意要设计成case语句后没有break的），但是你可以用一行代码重写他们的分析规则。这种重写并不能仅仅为了不让代码分析工具不报错而做，而是因为取消代码警报后我们的代码能变得更整洁。这种重新同样能为读者澄清代码中不太好理解的地方。</p>
+<p>如果你开始分析你的代码，请认真对待这项工作。把代码分析作为和单元测试一样的构建应用的一部分，而且重新改下那些没有通过审查的代码。（记住，你可以在需要时重写单独的检查方法，但这么做的目的应该是能让程序员更清楚意识到所检查的和所写的代码是正确的。）</p>
+<p>代码分析和代码风格检查不一样。风格检查同样很有用（可以看之前的文章），但是代码分析通常应用于客观的危险模式，而不是抽象的风格选择。<br>（无可否认地，在这两者之间还存在模糊的地方，就像考虑在某些情况下是否使用“==”替代“===”一样。）</p>
+<p>有许多种的代码分析工具。找到一个适合你的工具。我们使用<strong>javascriptlint</strong>，因为它有足够数量的代码检查类型，并且它既可以基于项目（每个项目可以指定哪种检查类型需要加强）同时可以基于单行代码（这样程序员可以指定在什么时候需要显示的忽略审查）配置审查规则。</p>
+<p>同样，强烈建议你考虑在你的代码中使用’use strict’打开严格模式,因为这样可以让你代码的错误进口抛出来，以便Javascript处理器可以定位一个全局的漏洞或者相似的严重错误。</p>
+<blockquote>
+<p>译者注：lint 是最著名的C语言工具之一，是由贝尔实验室SteveJohnson于1979在PCC(PortableC Compiler)基础上开发的静态代码分析，一般由UNIX系统提供。与大多数C语言编译器相比，lint可以对程序进行更加广泛的错误分析，是一种更加严密的编译工具。最初，lint这个工具用来扫描C源文件并对源程序中不可移植的代码提出警告。但是现在大多数lint实用程序已经变得更加严密，它不但可以检查出可移植性问题，而且可以检查出那些虽然可移植并且完全合乎语法但却很可能是错误的特性。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://ppoffice.github.io/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/" data-id="cii8n28vv0006v0s6txiki4l7" class="article-share-link">分享到</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          NodeJs生产环境最佳实践-设计篇-Logging
+        
+      </div>
+    </a>
+  
+  
+    <a href="/hexo-theme-icarus/2015/01/29/nodejs-production-practices-design-codingstyle/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">NodeJs生产环境最佳实践-设计篇-代码风格</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+</section>
+      
+        <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/06/nodejs-production-practices-design-errorhandling/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-错误处理" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/06/nodejs-production-practices-design-errorhandling/" class="title">NodeJs生产环境最佳实践-设计篇-错误处理</a></p>
+              <p class="item-date"><time datetime="2015-02-06T12:18:00.000Z" itemprop="datePublished">2015-02-06</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/03/nodejs-production-practices-design-clientserver&specificsoftware/" class="title">NodeJs生产环境最佳实践-设计篇-客户端服务以及特定的软件</a></p>
+              <p class="item-date"><time datetime="2015-02-03T11:18:00.000Z" itemprop="datePublished">2015-02-03</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-Logging" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/02/nodejs-production-practices-design-logging/" class="title">NodeJs生产环境最佳实践-设计篇-Logging</a></p>
+              <p class="item-date"><time datetime="2015-02-02T11:18:00.000Z" itemprop="datePublished">2015-02-02</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-代码检验" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/02/01/nodejs-production-practices-design-linting/" class="title">NodeJs生产环境最佳实践-设计篇-代码检验</a></p>
+              <p class="item-date"><time datetime="2015-02-01T11:18:00.000Z" itemprop="datePublished">2015-02-01</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/hexo-theme-icarus/2015/01/29/nodejs-production-practices-design-codingstyle/" class="thumbnail">
+  
+    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-代码风格" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
+              <p class="item-title"><a href="/hexo-theme-icarus/2015/01/29/nodejs-production-practices-design-codingstyle/" class="title">NodeJs生产环境最佳实践-设计篇-代码风格</a></p>
+              <p class="item-date"><time datetime="2015-01-29T11:18:00.000Z" itemprop="datePublished">2015-01-29</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/hexo-theme-icarus/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a><span class="category-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/hexo-theme-icarus/archives/2015/02/">二月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/hexo-theme-icarus/archives/2015/01/">一月 2015</a><span class="archive-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+  
+  <div id="toTop" class="fa fa-chevron-up"></div>
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2000 - 2015 Jianbo Zhang<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+
+
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
+
+
+  <link rel="stylesheet" href="/hexo-theme-icarus/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/hexo-theme-icarus/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/hexo-theme-icarus/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
