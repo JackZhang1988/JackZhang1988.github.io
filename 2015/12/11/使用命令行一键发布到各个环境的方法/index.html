@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>NodeJs生产环境最佳实践-设计篇-代码检验 | Jianbo&#39;s Blog</title>
+  <title>使用命令行一键发布到各个环境的方法 | Jianbo&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+  <meta name="description" content="使用命令行一键发布到各个环境的方法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="NodeJs生产环境最佳实践-设计篇-代码检验">
-<meta property="og:url" content="http://jackzhang1988.github.io/2015/02/01/nodejs-production-practices-design-linting/index.html">
+<meta property="og:title" content="使用命令行一键发布到各个环境的方法">
+<meta property="og:url" content="http://jackzhang1988.github.io/2015/12/11/使用命令行一键发布到各个环境的方法/index.html">
 <meta property="og:site_name" content="Jianbo's Blog">
-<meta property="og:description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
-<meta property="og:updated_time" content="2015-12-16T10:30:42.000Z">
+<meta property="og:description" content="使用命令行一键发布到各个环境的方法">
+<meta property="og:image" content="http://jackzhang1988.github.io/img/fabu1.png">
+<meta property="og:image" content="http://jackzhang1988.github.io/img/fabu2.png">
+<meta property="og:updated_time" content="2016-03-18T02:02:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="NodeJs生产环境最佳实践-设计篇-代码检验">
-<meta name="twitter:description" content="NodeJs生产环境最佳实践-设计篇-代码检验">
+<meta name="twitter:title" content="使用命令行一键发布到各个环境的方法">
+<meta name="twitter:description" content="使用命令行一键发布到各个环境的方法">
   
   
     <link rel="icon" href="favicon.png">
@@ -130,12 +132,12 @@
 </aside>
 
       
-      <section id="main"><article id="post-nodejs-production-practices-design-linting" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-使用命令行一键发布到各个环境的方法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       
 	
-		<img src="https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png" class="article-banner">
+		<img src="http://swiftcafe.io/images/iterm/1.png" class="article-banner">
 	
 
 
@@ -147,7 +149,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      NodeJs生产环境最佳实践-设计篇-代码检验
+      使用命令行一键发布到各个环境的方法
     </h1>
   
 
@@ -155,8 +157,8 @@
           
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2015/02/01/nodejs-production-practices-design-linting/">
-      <time datetime="2015-02-01T11:18:00.000Z" itemprop="datePublished">2015-02-01</time>
+    <a href="/2015/12/11/使用命令行一键发布到各个环境的方法/">
+      <time datetime="2015-12-11T02:39:34.000Z" itemprop="datePublished">2015-12-11</time>
     </a>
   </div>
 
@@ -164,7 +166,7 @@
           
   <div class="article-category">
   	<i class="fa fa-folder"></i>
-    <a class="article-category-link" href="/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a>
+    <a class="article-category-link" href="/categories/项目管理优化/">项目管理优化</a>
   </div>
 
         </div>
@@ -173,21 +175,27 @@
     <div class="article-entry" itemprop="articleBody">
       
                 
-        <p><a href="https://www.joyent.com/developers/node/design" target="_blank" rel="external">文章译自:https://www.joyent.com/developers/node/design</a></p>
-<p>##代码检验（Linting）</p>
-<p>代码检验工具可以静态分析你的代码（而不需要运行它）来制定代码中潜在的bug或危险的设计模式，比如使用未声明的变量或者在switch中“case”声明内没有使用“break”。好的代码分析工具可能会更激进些（比如，有些情况我们是故意要设计成case语句后没有break的），但是你可以用一行代码重写他们的分析规则。这种重写并不能仅仅为了不让代码分析工具不报错而做，而是因为取消代码警报后我们的代码能变得更整洁。这种重新同样能为读者澄清代码中不太好理解的地方。</p>
-<p>如果你开始分析你的代码，请认真对待这项工作。把代码分析作为和单元测试一样的构建应用的一部分，而且重新改下那些没有通过审查的代码。（记住，你可以在需要时重写单独的检查方法，但这么做的目的应该是能让程序员更清楚意识到所检查的和所写的代码是正确的。）</p>
-<p>代码分析和代码风格检查不一样。风格检查同样很有用（可以看之前的文章），但是代码分析通常应用于客观的危险模式，而不是抽象的风格选择。<br>（无可否认地，在这两者之间还存在模糊的地方，就像考虑在某些情况下是否使用“==”替代“===”一样。）</p>
-<p>有许多种的代码分析工具。找到一个适合你的工具。我们使用<strong>javascriptlint</strong>，因为它有足够数量的代码检查类型，并且它既可以基于项目（每个项目可以指定哪种检查类型需要加强）同时可以基于单行代码（这样程序员可以指定在什么时候需要显示的忽略审查）配置审查规则。</p>
-<p>同样，强烈建议你考虑在你的代码中使用’use strict’打开严格模式,因为这样可以让你代码的错误进口抛出来，以便Javascript处理器可以定位一个全局的漏洞或者相似的严重错误。</p>
-<blockquote>
-<p>译者注：lint 是最著名的C语言工具之一，是由贝尔实验室SteveJohnson于1979在PCC(PortableC Compiler)基础上开发的静态代码分析，一般由UNIX系统提供。与大多数C语言编译器相比，lint可以对程序进行更加广泛的错误分析，是一种更加严密的编译工具。最初，lint这个工具用来扫描C源文件并对源程序中不可移植的代码提出警告。但是现在大多数lint实用程序已经变得更加严密，它不但可以检查出可移植性问题，而且可以检查出那些虽然可移植并且完全合乎语法但却很可能是错误的特性。</p>
-</blockquote>
+        <h1 id="u4F7F_u7528_u547D_u4EE4_u884C_u4E00_u952E_u53D1_u5E03_u5230_u5404_u4E2A_u73AF_u5883_u7684_u65B9_u6CD5"><a href="#u4F7F_u7528_u547D_u4EE4_u884C_u4E00_u952E_u53D1_u5E03_u5230_u5404_u4E2A_u73AF_u5883_u7684_u65B9_u6CD5" class="headerlink" title="使用命令行一键发布到各个环境的方法"></a>使用命令行一键发布到各个环境的方法</h1><p>由于2008发布平台由于多人使用时会造成冲突，而且一旦出问题，2008平台在调试修复上都十分困难。</p>
+<p>重构后的项目我们都是全量发布，所以我们可以直接在本地build然后直接发布到各个测试环境中。</p>
+<p>我写了两个脚本，帮助大家实现一键发布到各个环境的功能。</p>
+<p>使用方法：</p>
+<p>如果要发布测试环境，可以仅使用fabu.exp, 如果要发布61或线上换，需要将publish.exp放到你的堡垒机的根目录下。</p>
+<p>将fabu.exp 文件放入指定目录下（比如我放在/usr/local/bin下），同时设置你的堡垒机用户名和密码。</p>
+<p><img src="/img/fabu1.png" alt="配置fabu.exp"></p>
+<p>在想要发布的项目中执行grunt命令，然后在项目根目录下运行expect yourpath/fabu.exp + 测试环境号，就可以实现自动发布到指定测试环境。</p>
+<p>比如，我要app项目发布app项目到test19环境，首先我在app项目根目录运行grunt test19 (localConfig.js 已经配置好相应命令，直接运行grunt + 目标服务器就可以，同时保证grunt build后的文件在dist目录下，并且p5、H5或static文件夹在dist目录下)，<br>运行： expect /usr/local/bin/fabu.exp 19  （19表示发布到test19环境）<br>运行后dist目录下的文件会自动同步到test19环境上。</p>
+<p>发布61和线上环境：</p>
+<p>由于发布61和上线环境需要在跳板机scp时输入密码，所以要在跳板机上安装另一条脚本，publish.exp, 把publish.exp放到跳板机根目录下。</p>
+<p><img src="/img/fabu2.png" alt="配置publish.exp"></p>
+<p>同样运行发布测试环境的步骤，只是发布到61环境，发布参数为pre，上线环境为pro.</p>
+<p>expect /usr/local/bin/fabu.exp pre   //61环境<br>expect /usr/local/bin/fabu.exp pro   //线上环境，（前提是保证项目目录内weidian文件夹下有打好的压缩包）</p>
+<p>(如果遇到expect publish.exp commend not found等类似的错误，建议修改ssh配置文件： /etc/ssh/sshd_config，将PermitUserEnvironment设置为yes，然后重启ssh：/etc/init.d/ssh restart)</p>
+<p>以上就是使用命令行一键发布到各个测试环境的步骤。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://jackzhang1988.github.io/2015/02/01/nodejs-production-practices-design-linting/" data-id="cilx2bzts000chvs681sfsgwd" class="article-share-link">分享到</a>
+      <a data-url="http://jackzhang1988.github.io/2015/12/11/使用命令行一键发布到各个环境的方法/" data-id="cilx2bztf0004hvs6txiyl90l" class="article-share-link">分享到</a>
       
       
     </footer>
@@ -196,19 +204,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/02/02/nodejs-production-practices-design-logging/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          NodeJs生产环境最佳实践-设计篇-Logging
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/01/29/nodejs-production-practices-design-codingstyle/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/02/06/nodejs-production-practices-design-errorhandling/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">NodeJs生产环境最佳实践-设计篇-代码风格</div>
+      <div class="article-nav-title">NodeJs生产环境最佳实践-设计篇-错误处理</div>
     </a>
   
 </nav>

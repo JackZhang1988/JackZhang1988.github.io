@@ -101,7 +101,7 @@
     </div>
     <div class="article-info profile-block">
       <div class="article-info-block">
-        8
+        9
         <span>文章</span>
       </div>
       <div class="article-info-block">
@@ -130,6 +130,78 @@
 
       
       <section id="main">
+      <article id="post-nodejs-production-practices-design-controlflow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      
+	
+		<a href="/2015/01/28/nodejs-production-practices-design-controlflow/" itemprop="url"><img src="https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png" class="article-banner"></a>
+	
+
+
+
+    
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/28/nodejs-production-practices-design-controlflow/">NodeJs生产环境最佳实践-设计篇-流程控制</a>
+    </h1>
+  
+
+        <div class="article-meta">
+          
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2015/01/28/nodejs-production-practices-design-controlflow/">
+      <time datetime="2015-01-28T11:18:00.000Z" itemprop="datePublished">2015-01-28</time>
+    </a>
+  </div>
+
+
+          
+  <div class="article-category">
+  	<i class="fa fa-folder"></i>
+    <a class="article-category-link" href="/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a>
+  </div>
+
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+                
+        <p><a href="https://www.joyent.com/developers/node/design" target="_blank" rel="external">文章译自:https://www.joyent.com/developers/node/design</a></p>
+<p>##流程控制</p>
+<p>因为JavaScript有函数作为类对象已经闭包的概念，所以它很容易在需要的地方定义callback。这在你定义解决方案的原型十分有利，它允许你在正确的地方整合你的逻辑。<br>而且它可以像圣诞树一样将复杂的一系列方法整合起来。</p>
+<p>比如你想要连续地读取一系列文件，然后在这些任务中执行以下公用任务：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(<span class="string">'firstFile'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> <span class="title">firstCb</span>(<span class="params">err, firstFile</span>) </span>&#123;</span><br><span class="line">  doSomething(firstFile);</span><br><span class="line">  fs.readFile(<span class="string">'secondFile'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> <span class="title">secondCb</span>(<span class="params">err, secondFile</span>) </span>&#123;</span><br><span class="line">    doSomething(secondFile);</span><br><span class="line">    fs.readFile(<span class="string">'thirdFile'</span>, <span class="string">'utf8'</span>, <span class="function"><span class="keyword">function</span> <span class="title">thirdCb</span>(<span class="params">err, thirdFile</span>) </span>&#123;</span><br><span class="line">      doSomething(thirdFile);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这看起来不是很糟糕，但在设计模式上还是有一些不好的地方：</p>
+<ul>
+<li>如果这部分逻辑太过复杂，对于理解这段流程和操作的顺序都变得异常困难。</li>
+<li>这里面没有任何的错误处理，当我们执行第三层调用时，我们已经将第一层的错误跟踪两次了。</li>
+<li>在垃圾收集器只有在第三个操作完成时才会收集第一个文件读取的结果。闭包引起的内存泄露是JavaScript应用中常见的问题，而且通常难以诊断和检测。</li>
+</ul>
+<blockquote>
+<p>###vasync<br><a href="https://npmjs.org/package/vasync" target="_blank" rel="external">vasync</a>是一个流程控制库，它的设计灵感来自于<a href="https://npmjs.org/package/async" target="_blank" rel="external">async</a>模块。然而vasync被设计使得事件监控者对他们程序的运行的进度有足够的可见性和可观察性。这些信息对判断一个任务在什么时候出错十分重要。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://jackzhang1988.github.io/2015/01/28/nodejs-production-practices-design-controlflow/" data-id="cilx2bzu3000ihvs6cylpgh6f" class="article-share-link">分享到</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+    
       <article id="post-nodejs-production-practices-design-stream" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -187,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://jackzhang1988.github.io/2015/01/27/nodejs-production-practices-design-stream/" data-id="ciia4y02g000449s6r8awzfr2" class="article-share-link">分享到</a>
+      <a data-url="http://jackzhang1988.github.io/2015/01/27/nodejs-production-practices-design-stream/" data-id="cilx2bztn0007hvs62lz6gknm" class="article-share-link">分享到</a>
       
       
     </footer>
@@ -259,7 +331,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://jackzhang1988.github.io/2015/01/26/nodejs-production-practices-design-eventemitter/" data-id="ciia4y02t000b49s6sztbjtxz" class="article-share-link">分享到</a>
+      <a data-url="http://jackzhang1988.github.io/2015/01/26/nodejs-production-practices-design-eventemitter/" data-id="cilx2bztv000ehvs6g80aqrcy" class="article-share-link">分享到</a>
       
       
     </footer>
@@ -282,6 +354,23 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul id="recent-post" class="">
+        
+          <li>
+            
+            <div class="item-thumbnail">
+              <a href="/2015/12/11/使用命令行一键发布到各个环境的方法/" class="thumbnail">
+  
+    <span style="background-image:url(http://swiftcafe.io/images/iterm/1.png)" alt="使用命令行一键发布到各个环境的方法" class="thumbnail-image"></span>
+  
+</a>
+            </div>
+            
+            <div class="item-inner">
+              <p class="item-category"><a class="article-category-link" href="/categories/项目管理优化/">项目管理优化</a></p>
+              <p class="item-title"><a href="/2015/12/11/使用命令行一键发布到各个环境的方法/" class="title">使用命令行一键发布到各个环境的方法</a></p>
+              <p class="item-date"><time datetime="2015-12-11T02:39:34.000Z" itemprop="datePublished">2015-12-11</time></p>
+            </div>
+          </li>
         
           <li>
             
@@ -351,23 +440,6 @@
             </div>
           </li>
         
-          <li>
-            
-            <div class="item-thumbnail">
-              <a href="/2015/01/29/nodejs-production-practices-design-codingstyle/" class="thumbnail">
-  
-    <span style="background-image:url(https://www.eduonix.com/blog/wp-content/uploads/2015/11/Node-JS-Coding-Best-Practices-for-Beginners.png)" alt="NodeJs生产环境最佳实践-设计篇-代码风格" class="thumbnail-image"></span>
-  
-</a>
-            </div>
-            
-            <div class="item-inner">
-              <p class="item-category"><a class="article-category-link" href="/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a></p>
-              <p class="item-title"><a href="/2015/01/29/nodejs-production-practices-design-codingstyle/" class="title">NodeJs生产环境最佳实践-设计篇-代码风格</a></p>
-              <p class="item-date"><time datetime="2015-01-29T11:18:00.000Z" itemprop="datePublished">2015-01-29</time></p>
-            </div>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -377,7 +449,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">分类</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a><span class="category-list-count">8</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/NodeJs生产环境最佳实践/">NodeJs生产环境最佳实践</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/项目管理优化/">项目管理优化</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -390,7 +462,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -403,7 +475,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2000 - 2015 Jianbo Zhang<br>
+      &copy; 2000 - 2016 Jianbo Zhang<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
     </div>
   </div>
